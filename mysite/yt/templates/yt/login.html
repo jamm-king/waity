@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'yt/css/login.css' %}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <div class="login-form">
+        <h1>LOGO DESIGN</h1>
+        <form method="POST" action="{% url 'yt:login' %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="int-area">
+                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" autocomplete="off" required>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+            {% if field.errors %}
+            <div class="error_field">
+                <span style="color:red;">{{ field.errors }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <input type="hidden" id="error_value" name="error_value" value="0">
+            <div class="btn-area">
+                <button id="btn" type="submit">LOGIN</button>
+            </div>
+        </form>
+        <div class="caption">
+            <a href="">Forgot Password? </a>
+        </div>
+        <div class="caption">
+            <a href="{% url 'yt:register' %}">REGISTER ? </a>
+        </div>
+    </div>
+    <script>
+        let id = $('#id_username');
+        let pw = $('#id_password');
+        let btn = $('#btn');
+
+        $(btn).on('click', function() {
+            if($(id).val() == ""){
+                $(id).next('label').addClass('warning');
+                setTimeout(function() {
+                    $('label').removeClass('warning');
+                },1500);
+            }
+            else if($(pw).val() == ""){
+                $(pw).next('label').addClass('warning');
+                setTimeout(function() {
+                    $('label').removeClass('warning');
+                },1500);
+            }
+        });
+    </script>
+    <script>
+
+       $(document.body).on("keydown", function (event) {
+            if (event.keyCode == 116) {
+                alert('F5 pressed!');
+                $('#error_value').val('1');
+            }
+        });
+    </script>
+
+</body>
+</html>

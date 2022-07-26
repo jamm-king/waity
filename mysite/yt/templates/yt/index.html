@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'yt/css/autocomplete.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/yt.css' %}">
+</head>
+<body>
+    <section class="Box">
+        <nav id="topMenu">
+            <a id="logo" href="{% url 'yt:index' %}">
+                <img src="{% static  'yt/image/logo.png' %}">
+            </a>
+            <div id="menu">
+                <div class="menuLink">
+                    <a href="#main_text0">About us</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:boardList' %}">Board</a>
+                </div>
+                <div class="menuLink">
+                    <a href="#main_text1">Locations</a>
+                </div>
+                <div class="menuLink">
+                    {% if 'user' in request.session %}
+                    <a href="{% url 'yt:logout' %}">LogOut</a>
+                    {% else %}
+                    <a href="{% url 'yt:login' %}">LogIn</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <main>
+            <section class="searchBanner">
+                <form class= "searchBox" name="search" action="{% url 'yt:search' %}" autocomplete="off" method="get">
+                    <div class="autocomplete">
+                        <input class="searchBar" id="inputText" type="text" name="query" placeholder="Tag">
+                        <button type="submit"><i class="fa-search fa" aria-hidden="true"></i></button>
+                    </div>
+                </form>
+            </section>
+            <section class="contentsBox">
+                <input type="radio" name="input-pagination" id="pagination1" checked>
+                <input type="radio" name="input-pagination" id="pagination2">
+                <input type="radio" name="input-pagination" id="pagination3">
+                <section class="itemBox--index">
+                    <a href="{% url 'yt:game' %}" class="item" id="game"><span>게임</span></a>
+                    <a href="{% url 'yt:music' %}" class="item" id="music"><span>음악</span></a>
+                    <a href="{% url 'yt:eat' %}" class="item" id="eat"><span>먹방</span></a>
+                    <a href="{% url 'yt:sports' %}" class="item" id="sports"><span>스포츠</span></a>
+                    <a href="{% url 'yt:knowledge' %}" class="item" id="knowledge"><span>잡지식</span></a>
+                    <a href="{% url 'yt:entertain' %}" class="item" id="entertain"><span>연예</span></a>
+                    <a href="{% url 'yt:review' %}" class="item" id="review"><span>영화리뷰</span></a>
+                    <a href="{% url 'yt:documentary' %}" class="item" id="documentary"><span>다큐멘터리</span></a>
+                    <a href="{% url 'yt:vlog' %}" class="item" id="vlog"><span>브이로그</span></a>
+                </section>
+            </section>
+        </main>
+   
+        <hr>
+        <div class="main_text1" id="main_text1">
+            <h1>LOCATIONS</h1>
+            <div class="contents1">우리는 여기에 서식합니다.</div>
+            <div class="map">
+		    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3226.7904640530146!2d129.33742891512162!3d36.025409880115475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356701149ab3449b%3A0x7fbe22e5932b0c82!2z64W467iM656c65Oc67KE6rGwIO2PrO2VreuMgOydtOygkA!5e0!3m2!1sko!2skr!4v1638596071253!5m2!1sko!2skr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+        <footer>
+            <div class="footer_img">
+                <img src="{% static  'yt/image/logo.png' %}">
+            </div>
+            <div class="footer_desc">
+                CEO. 리 재 민
+                <br>Addr. 경북 포항시 남구 포스코대로 126
+                <br>고객상담실 Tel. 054-242-2401
+                <br>COPYRIGHT 2021. NOJAM. ALL RIGHT RESERVED.
+            </div>
+        </footer>
+    </section>
+<script src="{% static 'yt/js/autocomplete.js' %}"></script>
+<script src="{% static 'yt/js/itemDesc.js' %}"></script>
+<script>let tagArray = {{ tagArray|safe }}; autocomplete(document.getElementById("inputText"), tagArray);</script>
+<script>let kingTags = {{ kingTags|safe }}; let context = {{ context|safe }}; itemDesc(kingTags, context);</script>
+</body>
+</html>

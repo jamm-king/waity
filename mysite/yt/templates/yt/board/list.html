@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'yt/css/autocomplete.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/yt.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/board.css' %}">
+</head>
+<body>
+    <section class="Box">
+        <nav id="topMenu">
+            <a id="logo" href="{% url 'yt:index' %}">
+                <img src="{% static  'yt/image/logo.png' %}">
+            </a>
+            <div id="menu">
+                <div class="menuLink">
+                    <a href="{% url 'yt:index' %}#main_text0">About us</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:boardList' %}">Board</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:index' %}#main_text1">Locations</a>
+                </div>
+                <div class="menuLink">
+                    {% if 'user' in request.session %}
+                    <a href="{% url 'yt:logout' %}">LogOut</a>
+                    {% else %}
+                    <a href="{% url 'yt:login' %}">LogIn</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+      <div class="tableBox">
+        <div class="boardTypes">
+            {% for category in categories %}
+            {% if category == filter %}
+            <a href="{% url 'yt:boardCategory' category.e_name %}" class="boardType_active" >{{ category.name }}</a>
+            {% else %}
+            <a href="{% url 'yt:boardCategory' category.e_name %}" class="boardType">{{ category.name }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">제목</th>
+              <th scope="col">아이디</th>
+              <th scope="col">카테고리</th>
+              <th scope="col">작성일</th>
+              <th scope="col">마지막 업데이트</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for board in page_obj %}
+            <tr>
+                <td>
+                  <a href="{% url 'yt:boardDetail' board.id %}">{{ board.title }}</a>
+                </td>
+                <td>
+                  <a href="{% url 'yt:boardDetail' board.id %}">{{ board.writer }}</a>
+                </td>
+                <td>
+                  <a href="{% url 'yt:boardDetail' board.id %}" class="boardCat">{{ board.category.name }}</a>
+                </td>
+                <td>
+                  <a href="{% url 'yt:boardDetail' board.id %}">{{ board.created_at }}</a>
+                </td>
+                <td>
+                  <a href="{% url 'yt:boardDetail' board.id %}">{{ board.updated_at }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="tableFunc">
+          <form method="GET" action="{% url 'yt:boardWrite' %}">
+            <button><i class="fa fa-pencil-square-o" aria-hidden="true">글쓰기</i></button>
+          </form>
+          <br>
+          <form method="POST" action="{% url 'yt:myBoard' %}">
+            {% csrf_token %}
+            <button><i class="fa fa-user-circle" aria-hidden="true">나의 글</i></button>
+          </form>
+        </div>
+      </div>
+      <div class="paginationBox">
+        <ul class="pagination justify-content-center">
+            <!-- 이전페이지 -->
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
+            {% endif %}
+            <!-- 페이지리스트 -->
+
+
+            {% for page_number in page_obj.paginator.page_range %}
+            {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
+                {% if page_number == page_obj.number %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+      </div>
+    </section>
+<script>
+    var a, len, i, parent, grandparent;
+    a = document.getElementsByClassName('boardCat');
+    len = a.length;
+    for(i = 0; i < len; i++) {
+        if(a[i].innerText == '공지') {
+            a[i].style.color = 'red';
+            parent = a[i].parentElement;
+            grandparent = parent.parentElement;
+            grandparent.style.background = '#7de47d'
+        }
+    }
+</script>
+</body>

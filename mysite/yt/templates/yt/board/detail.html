@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'yt/css/autocomplete.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/yt.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/board.css' %}">
+</head>
+<body>
+    <section class="Box">
+        <nav id="topMenu">
+            <a id="logo" href="{% url 'yt:index' %}">
+                <img src="{% static  'yt/image/logo.png' %}">
+            </a>
+            <div id="menu">
+                <div class="menuLink">
+                    <a href="{% url 'yt:index' %}#main_text0">About us</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:boardList' %}">Board</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:index' %}#main_text1">Locations</a>
+                </div>
+                <div class="menuLink">
+                    {% if 'user' in request.session %}
+                    <a href="{% url 'yt:logout' %}">LogOut</a>
+                    {% else %}
+                    <a href="{% url 'yt:login' %}">LogIn</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+      <div class="boardBox">
+          <div class="boardContent">
+            <div id="title">{{ board.title }}</div>
+            <div id="boardInfo">
+                <span id="writer">{{ board.writer }}</span>
+                <span id="date">{{ board.updated_at }}</span>
+            </div>
+            <div id="contents">{{ board.contents }}</div>
+            <!-- 여기에 글 수정버튼 넣고 누를시 readonly 없애는 자바스크립트 -->
+          </div>
+          <div class="commentInfo">
+            {% if user == board.writer.id %}
+              <!--게시글 수정 -->
+              <form method = "GET" action="{% url 'yt:boardModify' board.id %}">
+                <button id="mod_board" type="submit">
+                  <i class="fa fa-wrench" aria-hidden="true">게시글 수정</i>
+                </button>
+              </form>
+            {% endif %}
+            <br>
+          </div>
+          <!-- 댓글 목록 -->
+          {% for comment in board.comment_set.all %}
+            <div class="commentBox">
+              <div class="comment">{{ comment }}</div>
+              <div class="commentInfo">
+                <span>{{ comment.author }}</span>
+                {% if comment.modify_date %}
+                <span>{{ comment.modify_date }}</span>
+                {% endif %}
+                {% if user == comment.author.id %}
+                <!-- 댓글 삭제 -->
+                <form method = "POST" action="{% url 'yt:commentDelete' comment.id %}">
+                  {% csrf_token %}
+                  <button type="submit">
+                      <i class="fa fa-trash-o" aria-hidden="true">삭제</i>
+                  </button>
+                </form>
+                  <!--댓글 수정 -->
+                <span id="mod">
+                  <button name="button" onclick="show({{ comment.id }})">
+                      <i class="fa fa-wrench" aria-hidden="true">수정</i>
+                  </button>
+                  <div class="comment_mod" id="form_{{ comment.id }}" style="display:none;">
+                    <form method="POST" action="{% url 'yt:commentModify' comment.id %}">
+                      {% csrf_token %}
+                      {{ comment_form }}
+                      <input type="submit" value="등록">
+                    </form>
+                  </div>
+                </span>
+                {% endif %}
+                <hr>
+              </div>
+            </div>
+          {% endfor %}
+          <!--댓글-->
+          <form method="POST" id="inputComment" action="{% url 'yt:new_comment' board.id %}">
+            {% csrf_token %}
+            <p> 댓글 달기 </p>
+            {{ comment_form }}
+            <input type="submit" value="댓글 입력">
+          </form>
+      </div>
+    </section>
+</body>
+<script>function show(comment_id)
+{
+  if(document.getElementById('form_'+comment_id).style.display == 'block'){
+    document.getElementById('form_'+comment_id).style.display = 'none'
+  }
+  else{
+    document.getElementById('form_'+comment_id).style.display = 'block'
+  }
+}
+</script>

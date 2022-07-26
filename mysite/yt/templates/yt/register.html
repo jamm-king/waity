@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'yt/css/login.css' %}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <div class="login-form">
+        <h1 style="font-weight:lighter;">회원가입</h1>
+        <form method="POST" action="{% url 'yt:register' %}">
+            {% csrf_token %}
+
+            <div class="int-area">
+                <input type="text" id="username" name="username" autocomplete="off" required>
+                <label for="username">Username</label>
+            </div>
+
+            <div class="int-area">
+                <input type="email" id="email" name="email" autocomplete="off" required>
+                <label for="email">Email address</label>
+            </div>
+
+            <div class="int-area">
+                <input type="password" id="password" name="password" autocomplete="off" required>
+                <label for="password">Password</label>
+            </div>
+
+            <div class="int-area">
+                <input type="password" id="re_password" name="re_password" autocomplete="off" required>
+                <label for="re_password">Re-Password</label>
+            </div>
+
+            <div class="btn-area">
+                <button id="btn" type="submit">REGISTER</button>
+            </div>
+        </form>
+        <div class="caption">
+            <a href="" style="color:red;">{{ error }}</a>
+        </div>
+    </div>
+    <script>
+        let id = $('#username');
+        let pw = $('#password');
+        let em = $('#email');
+        let rpw = $('#re_password');
+        let btn = $('#btn');
+
+        $(btn).on('click', function() {
+            if($(id).val() == ""){
+                $(id).next('label').addClass('warning');
+                setTimeout(function() {
+                    $('label').removeClass('warning');
+                },1500);
+            }
+            else if($(em).val() == ""){
+                $(em).next('label').addClass('warning');
+                setTimeout(function() {
+                    $('label').removeClass('warning');
+                },1500);
+            }
+            else if($(pw).val() == ""){
+                $(pw).next('label').addClass('warning');
+                setTimeout(function() {
+                    $('label').removeClass('warning');
+                },1500);
+            }
+            else if($(rpw).val() == ""){
+                $(rpw).next('label').addClass('warning');
+                setTimeout(function() {
+                    $('label').removeClass('warning');
+                },1500);
+            }
+        });
+    </script>
+</body>
+</html>

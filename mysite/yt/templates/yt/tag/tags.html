@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'yt/css/autocomplete.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/yt.css' %}">
+</head>
+<body>
+    <section class="Box">
+        <nav id="topMenu">
+            <a id="logo" href="{% url 'yt:index' %}">
+                <img src="{% static  'yt/image/logo.png' %}">
+            </a>
+            <div id="menu">
+                <div class="menuLink">
+                    <a href="#main_text0">About us</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:boardList' %}">Board</a>
+                </div>
+                <div class="menuLink">
+                    <a href="#main_text1">Locations</a>
+                </div>
+                <div class="menuLink">
+                    {% if 'user' in request.session %}
+                    <a href="{% url 'yt:logout' %}">LogOut</a>
+                    {% else %}
+                    <a href="{% url 'yt:login' %}">LogIn</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <main>
+            <section class="searchBanner">
+                <form class= "searchBox" name="search" action="{% url 'yt:search' %}" autocomplete="off" method="get">
+                    <div class="autocomplete">
+                        <input class="searchBar" id="inputText" type="text" name="query" placeholder="Tag">
+                        <button type="submit"><i class="fa-search fa" aria-hidden="true"></i></button>
+                    </div>
+                </form>
+            </section>
+            <section class="contentsBox">
+                <section class="itemBox--index">
+                    {% for tag in page_obj %}
+                        <a href={% url "yt:"|add:tag.address_name %} class="item" id="{{tag.kingtag.address_name}}"><span>{{tag.tag_name}}</span></a>
+                    {% endfor %}
+                </section>
+            </section>
+        </main>
+    </section>
+<script src="{% static 'yt/js/autocomplete.js' %}"></script>
+<script src="{% static 'yt/js/itemDesc.js' %}"></script>
+<script>let tagArray = {{ tagArray|safe }}; autocomplete(document.getElementById("inputText"), tagArray);</script>
+<script>let kingTags = {{ kingTags|safe }}; let context = {{ context|safe }}; itemDesc(kingTags, context);</script>
+</body>
+</html>

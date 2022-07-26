@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'yt/css/autocomplete.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/yt.css' %}">
+    <link rel="stylesheet" href="{% static 'yt/css/board.css' %}">
+</head>
+<body>
+    <section class="Box">
+        <nav id="topMenu">
+            <a id="logo" href="{% url 'yt:index' %}">
+                <img src="{% static  'yt/image/logo.png' %}">
+            </a>
+            <div id="menu">
+                <div class="menuLink">
+                    <a href="{% url 'yt:index' %}#main_text0">About us</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:boardList' %}">Board</a>
+                </div>
+                <div class="menuLink">
+                    <a href="{% url 'yt:index' %}#main_text1">Locations</a>
+                </div>
+                <div class="menuLink">
+                    {% if 'user' in request.session %}
+                    <a href="{% url 'yt:logout' %}">LogOut</a>
+                    {% else %}
+                    <a href="{% url 'yt:login' %}">LogIn</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+      <div class="boardBox">
+         <form method="POST" action="{% url 'yt:boardWrite' %}">
+           {% csrf_token %}
+           <div class="boardContent">
+           {% for field in form %}
+               {% ifequal field.name 'contents' %}
+               <textarea id="contents" name="{{ field.name }}" placeholder="{{ field.label }}"></textarea>
+               {% endifequal %}
+               {% ifequal field.name 'title' %}
+               <input type="{{ field.field.widget.input_type }}" id="title" placeholder="{{ field.label }}" name="{{ field.name }}"/>
+               {% endifequal %}
+               {% ifequal field.name 'category' %}
+               <select name="{{ field.name }}" id="category">
+                   {% for f in field %}
+                   {{ f }}
+                   {% endfor %}
+               </select>
+               {% endifequal %}
+           {% endfor %}
+           </div>
+           <button type="submit">글쓰기</button>
+         </form>
+      </div>
+    </section>
+</body>
