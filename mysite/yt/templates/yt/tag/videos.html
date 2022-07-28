@@ -46,9 +46,9 @@
             <section class="contentsBox">
                 <div class="itemBox--search">
                     <form action="{% url 'yt:all' %}" method="POST">
-                    {% csrf_token %}
-                    {% for video in page_obj %}
-                       <div class="channel">
+                        {% csrf_token %}
+                        {% for video in page_obj %}
+                        <div class="channel">
                             <a href="#" target="_blank"><img src="{{ video.thumbnail }}"></a>
                             <div class="chanDesc">
                                 <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
@@ -61,7 +61,7 @@
                                 <span id="chan--title">{{ video.title }}</span>
                             </div>
                         </div>
-                    {% endfor %}
+                        {% endfor %}
                         <input type="submit" value="submit">
                     </form>
                 </div>
