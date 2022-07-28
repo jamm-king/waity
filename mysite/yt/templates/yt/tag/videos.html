@@ -49,7 +49,7 @@
                         {% csrf_token %}
                         {% for video in page_obj %}
                             <div class="channel">
-                                <a href="#" target="_blank"><img src="{{ video.thumbnail }}"></a>
+                                <a href="#" target="_blank"><img src="{{ video.thumbnail }}" name="vi"></a>
                                 <div class="chanDesc">
                                     <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
                                         {% for tag in kingTags %}
@@ -117,7 +117,12 @@
         str = "tag"+i;
         v[i].setAttribute('name',str)
     }
-    
+    var v = document.getElementsByName('vi')
+    len = v.length
+    for(i=0;i<len;i++){
+        parent=v[i].parentElement
+        parent.setAttribute('href', 'https://www.youtube.com/watch?v=' + v[i].getAttribute('src').substring(23, 34))
+    }
 </script>
 <script src="{% static 'yt/js/thumbLink.js' %}"></script>
 <script>thumbLink();</script>
