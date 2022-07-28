@@ -12,8 +12,8 @@ def all(request):
         kingTags = KingTag.objects.all()[1:]
         context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
         return render(request, 'yt/tag/videos.html', context) 
-    else if request.method == 'POST':
-        
+    elif request.method == 'POST':
+
         page_obj = PageObject_All(request)
         for i in range(len(page_obj)):
             tag = request.POST.getlist('tag'+str(i))
