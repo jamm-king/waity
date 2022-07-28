@@ -157,7 +157,7 @@ def get_charfield(target_url):
         val['subscription_count'] = sub_num
 
     #썸네일
-    pattern = 'https://i.ytimg.com/vi/[\d\w]+/hqdefault.jpg'
+    pattern = 'https://i.ytimg.com/vi/[^/]+/hqdefault.jpg'
     result = re.findall(pattern, html)
     thumb_list = []
     for item in result:
