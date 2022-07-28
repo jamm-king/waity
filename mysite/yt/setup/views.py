@@ -201,10 +201,13 @@ def setup_Video():
     channels = Channel.objects.all()
     for channel in tqdm(channels):
         for i in range(5):
-            _thumbnail = channel.chan_videoThumb[i]
-            _title = channel.chan_videoTitle[i]
-            _video_id = _thumbnail[23:34]
-            video = Video.objects.create(thumbnail=_thumbnail, title=_title, video_id=_video_id)
+            try:
+                _thumbnail = channel.chan_videoThumb[i]
+                _title = channel.chan_videoTitle[i]
+                _video_id = _thumbnail[23:34]
+                video = Video.objects.create(thumbnail=_thumbnail, title=_title, video_id=_video_id)
+            except:
+                pass
 
     return "New Videos created"
 
