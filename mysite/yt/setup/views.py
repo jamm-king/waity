@@ -2,7 +2,7 @@ import django
 django.setup()
 from django.shortcuts import render
 from youtube_api import YouTubeDataAPI
-from ..models import Tag, Channel, KingTag, ToFix
+from ..models import *
 from ..methods import get_charfield
 from multiprocessing import Pool
 from tqdm import tqdm
@@ -170,12 +170,15 @@ def update_Channel(id):
         channel.chan_keyword = info['keywords']
         channel.subscription_count = info['subscription_count']
         channel.chan_videoThumb = info['videoThumb'][:5]
-        #channel.chan_description = info['description']
         channel.chan_viewCount = info['viewCount']
         channel.chan_img = info['img']
         channel.chan_videoTitle = info['videoTitle'][:5]
-        channel.save()
-        print(channel.chan_title + ' updated')
+
+        if len(channel.chan_videoThumb) < 5:
+            print(info)
+        else:
+            channel.save()
+            print(channel.chan_title + ' updated')
 
     except Exception as e:
         print(channel.chan_title + ' failed!!!!!')
@@ -193,12 +196,39 @@ def update_Channel(id):
         channel.delete()
 
 
+def setup_Video():
+    channels = Channel.objects.all()
+    for channel in tqdm(channels):
+        for i in range(5):
+            _thumbnail = channel.chan_videoThumb[i]
+            _title = channel.chan_videoTitle[i]
+            _video_id = _thumbnail[23:34]
+            video = Video.objects.create(thumbnail=_thumbnail, title=_title, video_id=_video_id)
+
+    return "New Videos created"
+
+
+def handle_ToFix():
+    TF = ToFix.objects.all()
+    for tf in TF:
+        print('--------------------------------------------')
+        print(tf.chan_id, tf.errorType)
+        print('1: delete    2: pass')
+        print('--------------------------------------------')
+        a = input()
+        if a == '1':
+            tf.delete()
+        else:
+            pass
+
+    return "done"
+
+
 def UPDATE():
     ids = get_id()
     for id in ids:
         update_Channel(id)
     make_keywordTag()
+    setup_Video()
 
     return "Update Done"
-
-
