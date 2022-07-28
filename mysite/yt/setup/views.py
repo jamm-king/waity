@@ -175,7 +175,8 @@ def update_Channel(id):
         channel.chan_videoTitle = info['videoTitle'][:5]
 
         if len(channel.chan_videoThumb) < 5:
-            print(info)
+            print(channel.chan_title + " too few videos")
+            ToFix.objects.create(chan_id=channel.chan_id, errorType="too few videos")
         else:
             channel.save()
             print(channel.chan_title + ' updated')
