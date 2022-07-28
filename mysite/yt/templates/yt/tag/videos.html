@@ -45,25 +45,25 @@
             </section>
             <section class="contentsBox">
                 <div class="itemBox--search">
+                    <form action="{% url 'yt:all' %}" method="POST">
+                    {% csrf_token %}
                     {% for video in page_obj %}
-		    	
                        <div class="channel">
                             <a href="#" target="_blank"><img src="{{ video.thumbnail }}"></a>
                             <div class="chanDesc">
-                                <span id="chan--title">{{ video.title }}</span>
+                                <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
+                                    {% for tag in kingTags %}
+                                        <option value="{{ tag }}">{{ tag.address_name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="thumbnailBox">
-                                <form action="">
-                                    <select name="tag" id="tag" multiple>
-                                        {% for tag in kingTags %}
-                                            <option value="{{ tag }}">{{ tag.address_name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <input type="submit" value="submit">
-                                </form>
+                                <span id="chan--title">{{ video.title }}</span>
                             </div>
                         </div>
                     {% endfor %}
+                        <input type="submit" value="submit">
+                    </form>
                 </div>
             </section>
             <div class="paginationBox">
@@ -110,6 +110,15 @@
     </section>
 <script src="{% static 'yt/js/autocomplete.js' %}"></script>
 <script>let tagArray = {{ tagArray|safe }}; autocomplete(document.getElementById("inputText"), tagArray);</script>
+<script>
+    var v = document.getElementsByTagName('select')
+    len = v.length
+    for(i=0;i<len;i++){
+        str = "tag"+i;
+        v[i].setAttribute('name',str)
+    }
+
+</script>
 <script src="{% static 'yt/js/thumbLink.js' %}"></script>
 <script>thumbLink();</script>
 </body>

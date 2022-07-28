@@ -5,12 +5,41 @@ from ..models import *
 
 def all(request):
 
-    page_obj = PageObject_All(request)
-    tagArray = Autocomplete()
-    context = ItemDesc()
-    kingTags = KingTag.objects.all()[1:]
-    context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
-    return render(request, 'yt/tag/videos.html', context) 
+    if request.method == 'GET':
+        page_obj = PageObject_All(request)
+        for i in page_obj:
+            print(i)
+
+        print('-----------------------------------------------')
+        tagArray = Autocomplete()
+        context = ItemDesc()
+        kingTags = KingTag.objects.all()[1:]
+        context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
+        return render(request, 'yt/tag/videos.html', context) 
+    else:
+        page_obj = PageObject_All(request)
+        for i in range(len(page_obj)):
+            tag = request.POST.getlist('tag'+str(i))
+            video = page_obj[i]
+            # 기존태그 삭제     
+            v = video.tag.all()
+            for j in v:
+                video.tag.remove(j)
+            # 새롭게 정의한 태그    
+            for t in tag:
+                video.tag.add(Tag.objects.filter(tag_name=t).get())
+
+            video.save()
+        for i in range(len(page_obj)):
+            video = page_obj[i]
+            print(video.tag.all())
+                    
+        print('----------------')
+        tagArray = Autocomplete()
+        context = ItemDesc()
+        kingTags = KingTag.objects.all()[1:]
+        context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
+        return render(request, 'yt/tag/videos.html', context) 
 
 
 def game(request):
