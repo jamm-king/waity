@@ -7,16 +7,13 @@ def all(request):
 
     if request.method == 'GET':
         page_obj = PageObject_All(request)
-        for i in page_obj:
-            print(i)
-
-        print('-----------------------------------------------')
         tagArray = Autocomplete()
         context = ItemDesc()
         kingTags = KingTag.objects.all()[1:]
         context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
         return render(request, 'yt/tag/videos.html', context) 
-    else:
+    else if request.method == 'POST':
+        
         page_obj = PageObject_All(request)
         for i in range(len(page_obj)):
             tag = request.POST.getlist('tag'+str(i))
@@ -28,13 +25,11 @@ def all(request):
             # 새롭게 정의한 태그    
             for t in tag:
                 video.tag.add(Tag.objects.filter(tag_name=t).get())
-
             video.save()
         for i in range(len(page_obj)):
             video = page_obj[i]
             print(video.tag.all())
-                    
-        print('----------------')
+
         tagArray = Autocomplete()
         context = ItemDesc()
         kingTags = KingTag.objects.all()[1:]
