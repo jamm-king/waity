@@ -72,13 +72,6 @@ def PageObject_All(request):
     page_obj = paginator.get_page(page)
     return page_obj
 
-def PageObject_All2(request):
-    tag = Video.objects.all()
-    page = request.POST.get('page', '1')
-    paginator = Paginator(tag, 8)
-    page_obj = paginator.get_page(page)
-    return page_obj
-
 
 def PageObject_Board(request):
     notice = Category.objects.filter(e_name='notice').get()

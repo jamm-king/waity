@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from ..methods import PageObject_All,PageObject_All2, PageObject_Tag, PageObject_Channel, Autocomplete, ItemDesc, AddressNames
+from ..methods import PageObject_All, PageObject_Tag, PageObject_Channel, Autocomplete, ItemDesc, AddressNames
 from ..models import *
 
 
@@ -12,9 +12,9 @@ def all(request):
         kingTags = KingTag.objects.all()[1:]
         context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
         return render(request, 'yt/tag/videos.html', context) 
-    elif request.method == 'POST':
 
-        page_obj = PageObject_All2(request)
+    elif request.method == 'POST':
+        page_obj = PageObject_All(request)
         for i in range(len(page_obj)):
             tag = request.POST.getlist('tag'+str(i))
             video = page_obj[i]
