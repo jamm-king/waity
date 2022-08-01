@@ -165,12 +165,12 @@ def get_charfield(target_url):
         val['subscription_count'] = sub_num
 
     #썸네일
-    pattern = 'https://i.ytimg.com/vi/[^/]+/hqdefault.jpg'
+    pattern = 'https://i.ytimg.com/vi/[^/]+/hqdefault'
     result = re.findall(pattern, html)
     thumb_list = []
     for item in result:
         if item not in thumb_list:
-            thumb_list.append(item)
+            thumb_list.append(item+'.jpg')
     thumb_list = thumb_list[:5]
     val['title'] = title
     val['videoThumb'] = thumb_list
