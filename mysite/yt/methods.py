@@ -179,6 +179,7 @@ def get_charfield(target_url):
     for item in result:
         thumbnail = re.findall(p3, re.findall(p1, item)[0])[0] + '.jpg'
         title = re.sub(p5, '', re.sub(p4, '', re.findall(p2, item)[0]))
+        title = title.replace(',', '')
         thumb_list.append(thumbnail)
         title_list.append(title)
 
