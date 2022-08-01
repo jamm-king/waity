@@ -205,7 +205,8 @@ def setup_Video():
                 _thumbnail = channel.chan_videoThumb[i]
                 _title = channel.chan_videoTitle[i]
                 _video_id = _thumbnail[23:34]
-                video = Video.objects.create(thumbnail=_thumbnail, title=_title, video_id=_video_id)
+                _video = Video.objects.create(thumbnail=_thumbnail, title=_title, video_id=_video_id)
+                channel.video.add(_video)
             except:
                 pass
 
