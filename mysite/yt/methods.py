@@ -138,6 +138,7 @@ def get_charfield(target_url):
 
     #채널 이름
     title = soup.find('meta', {'itemprop': 'name'}).get('content')
+    val['title'] = title
 
     #구독자 수
     pattern = '(구독자 (\d+[.]\d+(천|만|억)|(\d+(천|만|억))|\d+)명)'
@@ -164,30 +165,24 @@ def get_charfield(target_url):
             sub_num = int(sub_num)
         val['subscription_count'] = sub_num
 
-    #썸네일
-    pattern = 'https://i.ytimg.com/vi/[^/]+/hqdefault'
-    result = re.findall(pattern, html)
-    thumb_list = []
-    for item in result:
-        if item not in thumb_list:
-            thumb_list.append(item+'.jpg')
-    thumb_list = thumb_list[:5]
-    val['title'] = title
-    val['videoThumb'] = thumb_list
+    #영상
+    pattern = '{"url":"[^"]+","width"[^"]+"height"[^"]+"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"}}'
+    p1 = '"url":"[^"]+","width"[^"]+"height"[^"]+"'
+    p2 = '"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"'
+    p3 = 'https://i.ytimg.com/vi/[^/]+/hqdefault'
+    p4 = '"title":{"accessibility":{"accessibilityData":{"label":"'
+    p5 = '\\s게시자:[^"]+"'
 
-    #썸네일 제목
-    h = re.sub('\\\\"', '', html)
+    result = re.findall(pattern, html)[:5]
+    thumb_list = []
     title_list = []
-    pattern = '"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"}}'
-    iter1 = '"title":{"accessibility":{"accessibilityData":{"label":"'
-    iter2 = '\s게시자:[^"]+"}}'
-    result = re.findall(pattern, h)
     for item in result:
-        item = re.sub(iter1, "", item)
-        item = re.sub(iter2, "", item)
-        item = item.replace(',','')
-        title_list.append(item)
-    title_list = title_list[:5]
+        thumbnail = re.findall(p3, re.findall(p1, item)[0])[0] + '.jpg'
+        title = re.sub(p5, '', re.sub(p4, '', re.findall(p2, item)[0]))
+        thumb_list.append(thumbnail)
+        title_list.append(title)
+
+    val['videoThumb'] = thumb_list
     val['videoTitle'] = title_list
 
     #이미지
@@ -196,11 +191,11 @@ def get_charfield(target_url):
 
     #설명
     desc = soup.find('meta', {'itemprop': 'description'}).get('content')
-
-    html = requests.get(target_url + '/about').text
-    soup = BeautifulSoup(html, 'lxml')
+    val['description'] = desc
 
     #조회수
+    html = requests.get(target_url + '/about').text
+    soup = BeautifulSoup(html, 'lxml')
     pattern = '조회수 [,\d]+회'
     temp2 = re.search(pattern, html)
     if temp2 == None:
@@ -209,10 +204,7 @@ def get_charfield(target_url):
         temp2 = temp2.group()
         cnt = re.sub('조회수| |회|,', '', temp2)
         cnt = int(cnt)
-
-    val['description'] = desc
     val['viewCount'] = cnt
 
-    #val : 'title', 'keywords', 'subscription_count', 'videoThumb', 'description', 'viewCount','img'
-
+    #val : 'title', 'keywords', 'subscription_count', 'videoThumb', 'description', 'viewCount','img', 'videoTitle'
     return val
