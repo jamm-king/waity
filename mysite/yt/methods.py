@@ -165,23 +165,52 @@ def get_charfield(target_url):
             sub_num = int(sub_num)
         val['subscription_count'] = sub_num
 
-    #영상
-    pattern = '{"url":"[^"]+","width"[^"]+"height"[^"]+"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"}}'
-    p1 = '"url":"[^"]+","width"[^"]+"height"[^"]+"'
-    p2 = '"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"'
-    p3 = 'https://i.ytimg.com/vi/[^/]+/hqdefault'
-    p4 = '"title":{"accessibility":{"accessibilityData":{"label":"'
-    p5 = '\\s게시자:[^"]+"'
+    #영상 크롤링 Regular expression 
+    # pattern = '{"url":"[^"]+","width"[^"]+"height"[^"]+"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"}}'
+    # p1 = '"url":"[^"]+","width"[^"]+"height"[^"]+"'
+    # p2 = '"title":{"accessibility":{"accessibilityData":{"label":"[^"]+"'
+    # p3 = 'https://i.ytimg.com/vi/[^/]+/hqdefault'
+    # p4 = '"title":{"accessibility":{"accessibilityData":{"label":"'
+    # p5 = '\\s게시자:[^"]+"'
 
-    result = re.findall(pattern, html)[:5]
+    # result = re.findall(pattern, html)[:5]
+    # thumb_list = []
+    # title_list = []
+    # for item in result:
+    #     thumbnail = re.findall(p3, re.findall(p1, item)[0])[0] + '.jpg'
+    #     title = re.sub(p5, '', re.sub(p4, '', re.findall(p2, item)[0]))
+    #     title = title.replace(',', '')
+    #     thumb_list.append(thumbnail)
+    #     title_list.append(title)
+
+    # val['videoThumb'] = thumb_list
+    # val['videoTitle'] = title_list
+    data = soup.find_all('script')[33]
+    data = str(data.contents[0])
+    data = data.replace('var ytInitialData = ','')
+    data = data.replace(';','')
+    json_data = json.loads(data)
+
     thumb_list = []
     title_list = []
-    for item in result:
-        thumbnail = re.findall(p3, re.findall(p1, item)[0])[0] + '.jpg'
-        title = re.sub(p5, '', re.sub(p4, '', re.findall(p2, item)[0]))
-        title = title.replace(',', '')
+    videos = ""
+    try:
+        # 채널 가장 위에 영상 or 실시간 없는경우 
+        videos = json_data['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['horizontalListRenderer']['items']
+
+
+    except:
+        # 채널 가장 위에 영상 or 실시간 있는경우 -> [1]
+        videos = json_data['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][1]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['horizontalListRenderer']['items']
+
+
+    for i,video in enumerate(videos):
+        if i == 5:
+            break
+        title_list.append(video['gridVideoRenderer']['title']['simpleText'])
+        thumbnail = video['gridVideoRenderer']['thumbnail']['thumbnails'][0]['url']
+        thumbnail = thumbnail.split('hqdefault')[0] + 'hqdefault.jpg'
         thumb_list.append(thumbnail)
-        title_list.append(title)
 
     val['videoThumb'] = thumb_list
     val['videoTitle'] = title_list
