@@ -209,7 +209,7 @@ def get_charfield(target_url):
             break
         title_list.append(video['gridVideoRenderer']['title']['simpleText'])
         thumbnail = video['gridVideoRenderer']['thumbnail']['thumbnails'][0]['url']
-        thumbnail = thumbnail.split('hqdefault.jpg')[0] + 'hqdefault.jpg'
+        thumbnail = thumbnail.split('hqdefault')[0] + 'hqdefault.jpg'
         thumb_list.append(thumbnail)
 
     val['videoThumb'] = thumb_list
