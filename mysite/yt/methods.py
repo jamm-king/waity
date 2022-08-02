@@ -186,7 +186,7 @@ def get_charfield(target_url):
     # val['videoThumb'] = thumb_list
     # val['videoTitle'] = title_list
     data = soup.find_all('script')[33].text
-    data = data.replace('var ytInitialData =','')
+    data = data.replace('var ytInitialData = ','')
     data = data.replace(';','')
     json_data = json.loads(data)
 
