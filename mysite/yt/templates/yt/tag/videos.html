@@ -49,7 +49,7 @@
                         {% csrf_token %}
                         {% for obj in page_obj %}
                             <div class="channel">
-                                <a href="#" target="_blank"><img src="{{ obj }}" name="vi"></a>
+                                <a href="#" target="_blank"><img src="{{ obj.thumbnail }}" name="vi"></a>
                                 <div class="chanDesc">
                                     <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
                                         {% for tag in kingTags %}
