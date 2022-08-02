@@ -17,7 +17,7 @@ def all(request):
         page_obj = PageObject_All2(request)
         for i in range(len(page_obj)):
             tag = request.POST.getlist('tag'+str(i))
-            video = page_obj[i]
+            video = page_obj[i][0]
             # 기존태그 삭제     
             v = video.tag.all()
             for j in v:
