@@ -69,8 +69,8 @@ def PageObject_All(request):
     video = Video.objects.all()
     obj = []
     for v in video:
-        t = v.tag.all()
-        o = {'video': v, 'tag': t}
+        t = list(v.tag.all())
+        o = [v, t]
         obj.append(o)
     page = request.GET.get('page', '1')
     paginator = Paginator(obj, 8)
