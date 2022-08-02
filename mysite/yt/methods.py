@@ -67,16 +67,15 @@ def PageObject_Channel(request, tagName):
 
 def PageObject_All(request):
     video = Video.objects.all()
-    tag_list = []
+    obj = []
     for v in video:
-        tag = list(v.tag.all())
-        tag_list.append(tag)
+        t = list(v.tag.all())
+        o = [v, t]
+        obj.append(o)
     page = request.GET.get('page', '1')
-    paginator_video = Paginator(video, 8)
-    paginator_tag = Paginator(tag_list, 8)
-    page_obj_video = paginator_video.get_page(page)
-    page_obj_tag = paginator_tag.get_page(page)
-    return page_obj_video, page_obj_tag
+    paginator = Paginator(obj, 8)
+    page_obj = paginator.get_page(page)
+    return page_obj
 
 
 def PageObject_All2(request):

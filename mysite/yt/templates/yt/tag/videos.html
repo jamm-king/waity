@@ -47,25 +47,25 @@
                 <div class="itemBox--search">
                     <form action="{% url 'yt:all' %}" method="POST">
                         {% csrf_token %}
-                        {% for video in page_obj_video %}
-                            <div class="channel">
-                                <a href="#" target="_blank"><img src="{{ video.thumbnail }}" name="vi"></a>
-                                <div class="chanDesc">
-                                    <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
-                                        {% for tag in kingTags %}
-                                            <option value="{{ tag }}">{{ tag.address_name }}</option>
-                                        {% endfor %}
-                                    </select>
+                        {% for obj in page_obj %}
+                            {% for video, tags in obj %}
+                                <div class="channel">
+                                    <a href="#" target="_blank"><img src="{{ video.thumbnail }}" name="vi"></a>
+                                    <div class="chanDesc">
+                                        <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
+                                            {% for tag in kingTags %}
+                                                <option value="{{ tag }}">{{ tag.address_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="thumbnailBox">
+                                        <span id="chan--title">{{ video.title }}</span>
+                                        {{ tags }}
+                                    </div>
                                 </div>
-                                <div class="thumbnailBox">
-                                    <span id="chan--title">{{ video.title }}</span>
-                                    {% for tags in page_obj_tag %}
-                                        {{ tags[0] }}
-                                    {% endfor %}
-                                </div>
-                            </div>
+                            {% endfor %}
                         {% endfor %}
-                        <input type="hidden" name="page" value="{{ page_obj_video.number }}">
+                        <input type="hidden" name="page" value="{{ page_obj.number }}">
                         <input type="submit" value="submit">
                     </form>
                 </div>
@@ -73,9 +73,9 @@
             <div class="paginationBox">
                 <ul class="pagination justify-content-center">
                     <!-- 이전페이지 -->
-                    {% if page_obj_video.has_previous %}
+                    {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?query={{ query }}&page={{ page_obj_video.previous_page_number }}">이전</a>
+                        <a class="page-link" href="?query={{ query }}&page={{ page_obj.previous_page_number }}">이전</a>
                     </li>
                     {% else %}
                     <li class="page-item disabled">
@@ -85,9 +85,9 @@
                     <!-- 페이지리스트 -->
 
 
-                    {% for page_number in page_obj_video.paginator.page_range %}
-                    {% if page_number >= page_obj_video.number|add:-5 and page_number <= page_obj_video.number|add:5 %}
-                        {% if page_number == page_obj_video.number %}
+                    {% for page_number in page_obj.paginator.page_range %}
+                    {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
+                        {% if page_number == page_obj.number %}
                         <li class="page-item active" aria-current="page">
                             <a class="page-link" href="?query={{ query }}&page={{ page_number }}">{{ page_number }}</a>
                         </li>
@@ -99,9 +99,9 @@
                     {% endif %}
                     {% endfor %}
                     <!-- 다음페이지 -->
-                    {% if page_obj_video.has_next %}
+                    {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?query={{ query }}&page={{ page_obj_video.next_page_number }}">다음</a>
+                        <a class="page-link" href="?query={{ query }}&page={{ page_obj.next_page_number }}">다음</a>
                     </li>
                     {% else %}
                     <li class="page-item disabled">

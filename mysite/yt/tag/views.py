@@ -6,11 +6,11 @@ from ..models import *
 def all(request):
 
     if request.method == 'GET':
-        page_obj_video, page_obj_tag = PageObject_All(request)
+        page_obj = PageObject_All(request)
         tagArray = Autocomplete()
         context = ItemDesc()
         kingTags = KingTag.objects.all()[1:]
-        context = {'page_obj_video': page_obj_video, 'page_obj_tag': page_obj_tag, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
+        context = {'page_obj': page_obj, 'tagArray': tagArray, 'kingTags': kingTags, 'context': context}
         return render(request, 'yt/tag/videos.html', context) 
 
     elif request.method == 'POST':
