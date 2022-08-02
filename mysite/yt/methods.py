@@ -192,7 +192,17 @@ def get_charfield(target_url):
 
     thumb_list = []
     title_list = []
-    videos = json_data['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['horizontalListRenderer']['items']
+    videos = ""
+    try:
+        # 채널 가장 위에 영상 or 실시간 없는경우 
+        videos = json_data['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['horizontalListRenderer']['items']
+
+
+    except:
+        # 채널 가장 위에 영상 or 실시간 있는경우 -> [1]
+        videos = json_data['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][1]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['horizontalListRenderer']['items']
+
+
     for i,video in enumerate(videos):
         if i == 5:
             break
