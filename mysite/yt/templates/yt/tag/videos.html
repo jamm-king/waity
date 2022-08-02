@@ -47,23 +47,21 @@
                 <div class="itemBox--search">
                     <form action="{% url 'yt:all' %}" method="POST">
                         {% csrf_token %}
-                        {% for obj in page_obj %}
-                            {% for video, tags in obj %}
-                                <div class="channel">
-                                    <a href="#" target="_blank"><img src="{{ video.thumbnail }}" name="vi"></a>
-                                    <div class="chanDesc">
-                                        <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
-                                            {% for tag in kingTags %}
-                                                <option value="{{ tag }}">{{ tag.address_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="thumbnailBox">
-                                        <span id="chan--title">{{ video.title }}</span>
-                                        {{ tags }}
-                                    </div>
+                        {% for video, tags in page_obj %}
+                            <div class="channel">
+                                <a href="#" target="_blank"><img src="{{ video.thumbnail }}" name="vi"></a>
+                                <div class="chanDesc">
+                                    <select name="tag" id="tag" style="width:100%; height:100%;" multiple>
+                                        {% for tag in kingTags %}
+                                            <option value="{{ tag }}">{{ tag.address_name }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-                            {% endfor %}
+                                <div class="thumbnailBox">
+                                    <span id="chan--title">{{ video.title }}</span>
+                                    {{ tags }}
+                                </div>
+                            </div>
                         {% endfor %}
                         <input type="hidden" name="page" value="{{ page_obj.number }}">
                         <input type="submit" value="submit">
