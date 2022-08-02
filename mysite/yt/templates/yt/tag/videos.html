@@ -47,7 +47,7 @@
                 <div class="itemBox--search">
                     <form action="{% url 'yt:all' %}" method="POST">
                         {% csrf_token %}
-                        {% for video in page_obj %}
+                        {% for video, tags in page_obj %}
                             <div class="channel">
                                 <a href="#" target="_blank"><img src="{{ video.thumbnail }}" name="vi"></a>
                                 <div class="chanDesc">
@@ -59,6 +59,7 @@
                                 </div>
                                 <div class="thumbnailBox">
                                     <span id="chan--title">{{ video.title }}</span>
+                                    {{ tags }}
                                 </div>
                             </div>
                         {% endfor %}
