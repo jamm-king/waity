@@ -63,15 +63,6 @@
                                     {% else %}
                                     <i class="fa fa-video-camera" aria-hidden="true"></i>{{ channel.chan_viewCount }}회</span>
                                     {% endif %}
-				<form action="">
-					<label for="cars">Select tag:</label>
-					<select name="tags" id="cars" multiple>
-						{% for tag in kingTags %}
-							<option value="{{ tag }}">{{ tag.address_name }}</option>
-						{% endfor %}
-					<select>	
-					<input type="submit" value="Submit">
-				</form>
 			    </div>
 				    <div class="thumbnailBox">
 					{% for thumb in channel.chan_videoThumb %}
