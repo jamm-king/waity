@@ -15,7 +15,7 @@ class Tag(models.Model):
 
 class KingTag(Tag):
 
-    parentTag = models.ForeignKey(Tag, related_name='childTag', on_delete=models.CASCADE)
+    parentTag = models.ForeignKey(Tag, related_name='childTag', default=1, on_delete=models.SET_DEFAULT)
     address_name = models.CharField(max_length=200, default='')
 
     def __str__(self):
