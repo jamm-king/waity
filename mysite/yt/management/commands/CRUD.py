@@ -40,13 +40,25 @@ class Command(BaseCommand):
                 print('Wrong parent tag name')
         return
 
+    def CREATE_CSV(self):
+        clearConsole()
+        print("--------------------------------------------------")
+        print("                   CREATE CSV")
+        print("--------------------------------------------------")
+        try:
+            CREATE_CSV()
+            print('CSVs created')
+        except:
+            print('Creating CSVs failed')
+        sleep(2)
+        return
 
     def CREATE(self):
         while 1:
             clearConsole()
             print("--------------------------------------------------")
             print("                     CREATE")
-            print("        1. Channel  2. KingTag  3. Back")
+            print("        1. Channel  2. KingTag  3. CSV  4. Back")
             print("--------------------------------------------------")
             c = input()
             if c == '1':
@@ -54,6 +66,8 @@ class Command(BaseCommand):
             if c == '2':
                 self.CREATE_KingTag()
             if c == '3':
+                self.CREATE_CSV()
+            if c == '4':
                 return
         return
 
