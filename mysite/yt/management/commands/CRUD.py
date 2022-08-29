@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 print('Wrong parent tag name')
         return
 
-    def CREATE_Dump(self):
+    def CREATE_CSV(self):
         clearConsole()
         print("--------------------------------------------------")
         print("                   CREATE CSV")
