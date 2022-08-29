@@ -247,6 +247,7 @@ def CREATE_CSV():
         charset = 'utf8mb4'
     )
     cursor = waityDB.cursor(pymysql.cursors.DictCursor)
+    print('hi')
     tags = {'game': 2, 'music': 3, 'eat': 4, 'sports': 5, 'entertain': 6, 'knowledge': 7, 'review': 8,
             'documentary': 9, 'vlog': 10, 'leagueoflegend': 21, 'battleground': 22, 'overwatch': 23,
             'starcraft': 24, 'maplestory': 25, 'minecraft': 26, 'fifa': 27, 'sing': 31, 'piano': 32, 'mv': 33,
