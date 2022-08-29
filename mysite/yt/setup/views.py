@@ -237,3 +237,61 @@ def UPDATE():
     setup_Video()
 
     return "Update Done"
+
+def CREATE_CSV():
+    waityDB = pymysql.connect(
+        user = 'deploy',
+        passwd = '',
+        host = 'localhost',
+        db = 'yt',
+        charset = 'utf8mb4'
+    )
+    cursor = waityDB.cursor(pymysql.cursors.DictCursor)
+    tags = {'game': 2, 'music': 3, 'eat': 4, 'sports': 5, 'entertain': 6, 'knowledge': 7, 'review': 8,
+            'documentary': 9, 'vlog': 10, 'leagueoflegend': 21, 'battleground': 22, 'overwatch': 23,
+            'starcraft': 24, 'maplestory': 25, 'minecraft': 26, 'fifa': 27, 'sing': 31, 'piano': 32, 'mv': 33,
+            'classic': 34, 'audition': 35, 'hiphop': 36, 'trott': 37, 'popsong': 38, 'kpop': 39, 'soccer': 51,
+            'basketball': 52, 'baseball': 53, 'golf': 54, 'tennis': 55, 'idol': 61, 'play': 62}
+    items = tags.items()
+    data_dir = '/srv/waity/colab/csv/'
+
+    for k, v in items:
+
+        sql = 'select * from ( select distinct yt_video.video_id, yt_video.title, yt_video.thumbnail from yt_video, yt_video_tag where (yt_video.video_id = yt_video_tag.video_id) and (yt_video_tag.tag_id = ' + str(v) + ') )tb;'
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        data1 = result
+        for d in data1:
+            d['tag_id'] = 1
+
+        sql = 'select * from ( select distinct yt_video.video_id, yt_video.title, yt_video.thumbnail from yt_video, yt_video_tag where (yt_video.video_id = yt_video_tag.video_id) and (yt_video_tag.tag_id != ' + str(v) + ') )tb;'
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        data2 = result
+        for d in data2:
+            d['tag_id'] = 0
+
+        data = data1 + data2
+
+        _fieldnames = ['video_id', 'title', 'thumbnail', 'tag_id']
+        f = open(data_dir + k + '.csv', 'w', encoding='utf-8')
+        writer = csv.DictWriter(f, fieldnames=_fieldnames)
+        writer.writeheader()
+        writer.writerows(data)
+        f.close()
+
+        sql = 'select count(*) from ( select distinct yt_video.video_id, yt_video.title, yt_video.thumbnail from yt_video, yt_video_tag where (yt_video.video_id = yt_video_tag.video_id) and (yt_video_tag.tag_id = ' + str(v) + ') )tb;'
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cnt = result[0]['count(*)'] * 2
+        print(result, type(result))
+        df = pd.read_csv('datas\\' + k + '.csv')
+        df2 = df.duplicated(['video_id'],keep='first')
+        dup_idx=[]
+        for idx,flag in enumerate(df2):
+            if flag == True:
+                dup_idx.append(idx)
+        for i in reversed(dup_idx):
+            df.drop(df.index[i],axis=0,inplace=True)
+        df3 = df.loc[:cnt]
+        df3.to_csv(data_dir + k + '_balanced.csv')
