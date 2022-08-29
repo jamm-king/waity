@@ -52,14 +52,18 @@ class Command(BaseCommand):
                 try:
                     CSV_train()
                     print('CSVs created')
+                    sleep(2)
                 except:
                     print('Creating CSVs failed')
+                    sleep(2)
             if c == '2':
                 try:
                     CSV_verify()
                     print('CSVs created')
+                    sleep(2)
                 except:
                     print('Creating CSVs failed')
+                    sleep(2)
             if c == '3':
                 return
 
