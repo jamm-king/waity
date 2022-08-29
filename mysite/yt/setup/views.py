@@ -287,7 +287,7 @@ def CREATE_CSV():
         cursor.execute(sql)
         result = cursor.fetchall()
         cnt = result[0]['count(*)'] * 2
-        print(result, type(result))
+        print(k, cnt, 'created')
         df = pd.read_csv(data_dir + k + '.csv')
         df2 = df.duplicated(['video_id'],keep='first')
         dup_idx=[]
