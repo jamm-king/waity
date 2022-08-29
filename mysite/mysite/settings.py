@@ -28,8 +28,8 @@ SECRET_KEY = '*@%9+x*l&)54+@wq0xa+&n72^yxeukt=z$g67fux$bw3z^zkdc'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    ".ap-northeast-2.compute.amazonaws.com",
-    ".waity.pe.kr"
+    ".waity.pe.kr",
+    ".cafe24.com"
 ]
 
 

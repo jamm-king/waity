@@ -1,6 +1,5 @@
 from django.urls import path, include
 from . import views
-from django.conf.urls import url
 
 board_patterns = [
     path('', views.Board_list, name='boardList'),
