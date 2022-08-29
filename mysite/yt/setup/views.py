@@ -7,6 +7,9 @@ from ..methods import get_charfield
 from multiprocessing import Pool
 from tqdm import tqdm
 import time
+import pymysql
+import csv
+import pandas as pd
 
 
 def setup_Tag():
@@ -240,7 +243,7 @@ def UPDATE():
 
 def CREATE_CSV():
     waityDB = pymysql.connect(
-        user = 'deploy',
+        user = 'root',
         passwd = '',
         host = 'localhost',
         db = 'yt',

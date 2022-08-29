@@ -3,9 +3,6 @@ from yt.models import *
 from yt.setup.views import *
 from time import sleep
 import os
-import pymysql
-import csv
-import pandas as pd
 
 clearConsole = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
 
