@@ -299,24 +299,24 @@ def CSV_train():
         df3 = df.loc[:cnt]
         df3.to_csv(data_dir + k + '_balanced.csv')
 
-    def CSV_verify():
-        waityDB = pymysql.connect(
-        user = 'deploy',
-        passwd = '',
-        host = 'localhost',
-        db = 'yt',
-        charset = 'utf8mb4'
-        )
-        cursor = waityDB.cursor(pymysql.cursors.DictCursor)
-        data_dir = '/srv/waity/colab/csv/'
+def CSV_verify():
+    waityDB = pymysql.connect(
+    user = 'deploy',
+    passwd = '',
+    host = 'localhost',
+    db = 'yt',
+    charset = 'utf8mb4'
+    )
+    cursor = waityDB.cursor(pymysql.cursors.DictCursor)
+    data_dir = '/srv/waity/colab/csv/'
 
-        sql = 'select video_id, title, thumbnail from yt_video where yt_video.video_id not in (select video_id from yt_video_tag);'
-        cursor.execute(sql)
-        result = cursor.fetchall()
+    sql = 'select video_id, title, thumbnail from yt_video where yt_video.video_id not in (select video_id from yt_video_tag);'
+    cursor.execute(sql)
+    result = cursor.fetchall()
 
-        _fieldnames = ['video_id', 'title', 'thumbnail', 'tag_id']
-        f = open(data_dir + 'raw' + '.csv', 'w', encoding='utf-8')
-        writer = csv.DictWriter(f, fieldnames=_fieldnames)
-        writer.writeheader()
-        writer.writerows(result)
-        f.close()
+    _fieldnames = ['video_id', 'title', 'thumbnail', 'tag_id']
+    f = open(data_dir + 'raw' + '.csv', 'w', encoding='utf-8')
+    writer = csv.DictWriter(f, fieldnames=_fieldnames)
+    writer.writeheader()
+    writer.writerows(result)
+    f.close()
