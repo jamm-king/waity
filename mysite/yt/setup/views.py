@@ -243,7 +243,7 @@ def UPDATE():
 
 def CREATE_CSV():
     waityDB = pymysql.connect(
-        user = 'root',
+        user = 'deploy',
         passwd = '',
         host = 'localhost',
         db = 'yt',
