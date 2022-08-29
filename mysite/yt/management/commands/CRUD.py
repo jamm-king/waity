@@ -41,17 +41,27 @@ class Command(BaseCommand):
         return
 
     def CREATE_CSV(self):
-        clearConsole()
-        print("--------------------------------------------------")
-        print("                   CREATE CSV")
-        print("--------------------------------------------------")
-        try:
-            CREATE_CSV()
-            print('CSVs created')
-        except:
-            print('Creating CSVs failed')
-        sleep(2)
-        return
+        while 1:
+            clearConsole()
+            print("--------------------------------------------------")
+            print("                   CREATE CSV")
+            print("         1. To train  2. To verify  3. Back")
+            print("--------------------------------------------------")
+            c = input()
+            if c == '1':
+                try:
+                    CSV_train()
+                    print('CSVs created')
+                except:
+                    print('Creating CSVs failed')
+            if c == '2':
+                try:
+                    CSV_verify()
+                    print('CSVs created')
+                except:
+                    print('Creating CSVs failed')
+            if c == '3':
+                return
 
     def CREATE(self):
         while 1:
